@@ -35,4 +35,14 @@
         android:layout_below="@+id/ivImage"
         android:layout_marginLeft="5dp"/>
 
+    <TextView
+        android:id="@+id/tvTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#6A6A6A"
+        android:textSize="13sp"
+        android:layout_below="@id/tvDescription"
+        android:layout_marginLeft="5dp"
+        tools:text="8hr" />
+
 </RelativeLayout>

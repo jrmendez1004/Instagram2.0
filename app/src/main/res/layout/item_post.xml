@@ -3,27 +3,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:context=".PostDetailActivity">
 
     <TextView
         android:id="@+id/tvUsername"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
         android:text="TextView"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textStyle="bold"
-        android:layout_marginLeft="5dp"
         tools:text="rahul" />
 
     <ImageView
         android:id="@+id/ivImage"
         android:layout_width="match_parent"
         android:layout_height="300dp"
+        android:layout_below="@+id/tvUsername"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         android:scaleType="centerCrop"
-        android:layout_below="@+id/tvUsername"
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
@@ -71,11 +71,11 @@
         android:id="@+id/imageView7"
         android:layout_width="35dp"
         android:layout_height="35dp"
-        app:srcCompat="@drawable/ufi_new_direct"
         android:layout_below="@id/ivImage"
-        android:layout_toEndOf="@id/ivComment"
         android:layout_marginStart="5dp"
-        android:layout_marginTop="5dp"/>
+        android:layout_marginTop="5dp"
+        android:layout_toEndOf="@id/ivComment"
+        app:srcCompat="@drawable/ufi_new_direct" />
 
     <ImageView
         android:id="@+id/imageView8"

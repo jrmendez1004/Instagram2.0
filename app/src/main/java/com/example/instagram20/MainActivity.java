@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -23,9 +24,11 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     static String TAG = "MainActivity";
+    static int LOAD_LIMIT = 3;
     RecyclerView rvPosts;
 
     private SwipeRefreshLayout swipeContainer;
+    private EndlessRecyclerViewScrollListener scrollListener;
 
     protected PostsAdapter adapter;
     protected List<Post> allPosts;
@@ -37,13 +40,24 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolbarTop = (Toolbar) findViewById(R.id.toolbarTop);
         setSupportActionBar(toolbarTop);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        //getSupportActionBar().setIcon(res.drawable.nav_logo_whiteout);
 
         rvPosts = (RecyclerView) findViewById(R.id.rvPosts);
 
         allPosts = new ArrayList<>();
         adapter = new PostsAdapter(this, allPosts);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         rvPosts.setAdapter(adapter);
-        rvPosts.setLayoutManager(new LinearLayoutManager(this));
+        rvPosts.setLayoutManager(linearLayoutManager);
+
+        scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                loadNextDataFromApi(page);
+            }
+        };
+        rvPosts.addOnScrollListener(scrollListener);
 
         swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -58,17 +72,33 @@ public class MainActivity extends AppCompatActivity {
         queryPosts();
     }
 
-    private void queryPosts() {
+    private void loadNextDataFromApi(int page) {
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         query.include(Post.KEY_USER);
+        query.setLimit(LOAD_LIMIT);
+        query.setSkip(LOAD_LIMIT * page);
+        query.addDescendingOrder("createdAt");
         query.findInBackground(new FindCallback<Post>() {
             @Override
             public void done(List<Post> posts, ParseException e) {
                 if(e != null)
                     return;
-                for(Post post: posts){
-                    Log.i(TAG, "Post: " + post.getDescription());
-                }
+                allPosts.addAll(posts);
+                adapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+    private void queryPosts() {
+        ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
+        query.include(Post.KEY_USER);
+        query.setLimit(LOAD_LIMIT);
+        query.addDescendingOrder("createdAt");
+        query.findInBackground(new FindCallback<Post>() {
+            @Override
+            public void done(List<Post> posts, ParseException e) {
+                if(e != null)
+                    return;
                 allPosts.addAll(posts);
                 adapter.notifyDataSetChanged();
             }

@@ -3,6 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:icon="@drawable/nav_logo_whiteout"
+        android:title="Item" />
+    <item
         android:id="@+id/newPictureBtn"
         android:icon="@drawable/instagram_new_post_outline_24"
         android:onClick="postPicture"
@@ -13,5 +16,6 @@
         android:onClick="onLogout"
         android:title="Logout"
         app:showAsAction="ifRoom|withText"></item>
+
 
 </menu>

@@ -2,6 +2,9 @@ package com.example.instagram20;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,22 +18,44 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.lang.annotation.Target;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     static String TAG = "MainActivity";
+    RecyclerView rvPosts;
+
+    private SwipeRefreshLayout swipeContainer;
+
+    protected PostsAdapter adapter;
+    protected List<Post> allPosts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
         Toolbar toolbarTop = (Toolbar) findViewById(R.id.toolbarTop);
         setSupportActionBar(toolbarTop);
 
-        //queryPosts();
+        rvPosts = (RecyclerView) findViewById(R.id.rvPosts);
+
+        allPosts = new ArrayList<>();
+        adapter = new PostsAdapter(this, allPosts);
+        rvPosts.setAdapter(adapter);
+        rvPosts.setLayoutManager(new LinearLayoutManager(this));
+
+        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                adapter.clear();
+                queryPosts();
+                swipeContainer.setRefreshing(false);
+            }
+        });
+
+        queryPosts();
     }
 
     private void queryPosts() {
@@ -44,6 +69,8 @@ public class MainActivity extends AppCompatActivity {
                 for(Post post: posts){
                     Log.i(TAG, "Post: " + post.getDescription());
                 }
+                allPosts.addAll(posts);
+                adapter.notifyDataSetChanged();
             }
         });
     }

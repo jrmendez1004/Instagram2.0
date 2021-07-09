@@ -60,7 +60,6 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void done(ParseUser user, ParseException e) {
                 if(e != null) {
-                    Log.e(TAG, "issue with login", e);
                     return;
                 }
                 goMainActivity();

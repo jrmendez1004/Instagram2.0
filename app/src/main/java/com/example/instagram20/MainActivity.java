@@ -44,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolbarTop = (Toolbar) findViewById(R.id.toolbarTop);
         setSupportActionBar(toolbarTop);
-        //getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setIcon(resize(getResources().getDrawable(R.drawable.nav_logo_whiteout)));
 
         rvPosts = (RecyclerView) findViewById(R.id.rvPosts);
@@ -112,7 +111,6 @@ public class MainActivity extends AppCompatActivity {
     public void onLogout(MenuItem menuItem) {
         finish();
         ParseUser.logOut();
-        ParseUser currentUser = ParseUser.getCurrentUser();
         Intent i = new Intent(this, LoginActivity.class);
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // this makes sure the Back button won't work
         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

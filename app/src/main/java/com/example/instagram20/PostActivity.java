@@ -116,7 +116,6 @@ public class PostActivity extends AppCompatActivity {
         File mediaStorageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), TAG);
 
         if(!mediaStorageDir.exists() && !mediaStorageDir.mkdir()) {
-            Log.d(TAG, "Failed to create directory");
         }
 
         return new File(mediaStorageDir.getPath() + File.separator + photoFileName);

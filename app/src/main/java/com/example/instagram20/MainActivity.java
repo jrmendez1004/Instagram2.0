@@ -7,7 +7,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.DrawableWrapper;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -40,8 +44,8 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolbarTop = (Toolbar) findViewById(R.id.toolbarTop);
         setSupportActionBar(toolbarTop);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        //getSupportActionBar().setIcon(res.drawable.nav_logo_whiteout);
+        //getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setIcon(resize(getResources().getDrawable(R.drawable.nav_logo_whiteout)));
 
         rvPosts = (RecyclerView) findViewById(R.id.rvPosts);
 
@@ -123,5 +127,11 @@ public class MainActivity extends AppCompatActivity {
     public void postPicture(MenuItem menuItem) {
         Intent i = new Intent(this, PostActivity.class);
         startActivity(i);
+    }
+
+    private Drawable resize(Drawable image) {
+        Bitmap b = ((BitmapDrawable)image).getBitmap();
+        Bitmap bitmapResized = Bitmap.createScaledBitmap(b, 150, 50, false);
+        return new BitmapDrawable(getResources(), bitmapResized);
     }
 }
